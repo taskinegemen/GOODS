@@ -10,11 +10,13 @@
  * @property string $title
  * @property string $description
  * @property double $price
- * @property integer $category
+ * @property integer $category_id
  * @property integer $trade
+ * @property integer $user_id
  *
  * The followings are the available model relations:
- * @property Category $category0
+ * @property User $user
+ * @property Category $category
  * @property ItemPictures[] $itemPictures
  * @property ItemsLiked[] $itemsLikeds
  */
@@ -36,14 +38,14 @@ class Item extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('latitude, longtitude, title, description, price, category, trade', 'required'),
-			array('category, trade', 'numerical', 'integerOnly'=>true),
+			array('latitude, longtitude, title, description, price, category_id, trade, user_id', 'required'),
+			array('category_id, trade, user_id', 'numerical', 'integerOnly'=>true),
 			array('latitude, longtitude, price', 'numerical'),
 			array('title', 'length', 'max'=>500),
 			array('description', 'length', 'max'=>5000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('item_id, latitude, longtitude, title, description, price, category, trade', 'safe', 'on'=>'search'),
+			array('item_id, latitude, longtitude, title, description, price, category_id, trade, user_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,7 +57,8 @@ class Item extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'category0' => array(self::BELONGS_TO, 'Category', 'category'),
+			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+			'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
 			'itemPictures' => array(self::HAS_MANY, 'ItemPictures', 'item_id'),
 			'itemsLikeds' => array(self::HAS_MANY, 'ItemsLiked', 'item_id'),
 		);
@@ -73,8 +76,9 @@ class Item extends CActiveRecord
 			'title' => 'Title',
 			'description' => 'Description',
 			'price' => 'Price',
-			'category' => 'Category',
+			'category_id' => 'Category',
 			'trade' => 'Trade',
+			'user_id' => 'User',
 		);
 	}
 
@@ -102,8 +106,9 @@ class Item extends CActiveRecord
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price);
-		$criteria->compare('category',$this->category);
+		$criteria->compare('category_id',$this->category_id);
 		$criteria->compare('trade',$this->trade);
+		$criteria->compare('user_id',$this->user_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

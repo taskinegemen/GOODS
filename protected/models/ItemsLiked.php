@@ -8,6 +8,7 @@
  * @property integer $user_id
  * @property integer $item_id
  * @property string $date
+ * @property integer $read
  *
  * The followings are the available model relations:
  * @property User $user
@@ -31,11 +32,11 @@ class ItemsLiked extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, item_id, date', 'required'),
-			array('user_id, item_id', 'numerical', 'integerOnly'=>true),
+			array('user_id, item_id, date, read', 'required'),
+			array('user_id, item_id, read', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('items_liked_id, user_id, item_id, date', 'safe', 'on'=>'search'),
+			array('items_liked_id, user_id, item_id, date, read', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,7 @@ class ItemsLiked extends CActiveRecord
 			'user_id' => 'User',
 			'item_id' => 'Item',
 			'date' => 'Date',
+			'read' => 'Read',
 		);
 	}
 
@@ -87,6 +89,7 @@ class ItemsLiked extends CActiveRecord
 		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('item_id',$this->item_id);
 		$criteria->compare('date',$this->date,true);
+		$criteria->compare('read',$this->read);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

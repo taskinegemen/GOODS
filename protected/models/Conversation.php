@@ -1,27 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "profile_follows".
+ * This is the model class for table "conversation".
  *
- * The followings are the available columns in table 'profile_follows':
- * @property integer $profile_follows_id
- * @property integer $follower
- * @property integer $followed
+ * The followings are the available columns in table 'conversation':
+ * @property integer $communication_id
+ * @property integer $start_from
+ * @property integer $start_to
  * @property string $date
- * @property integer $read
  *
  * The followings are the available model relations:
- * @property User $follower0
- * @property User $followed0
+ * @property User $startTo
+ * @property User $startFrom
+ * @property Messages[] $messages
  */
-class ProfileFollows extends CActiveRecord
+class Conversation extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'profile_follows';
+		return 'conversation';
 	}
 
 	/**
@@ -32,11 +32,11 @@ class ProfileFollows extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('follower, followed, date, read', 'required'),
-			array('follower, followed, read', 'numerical', 'integerOnly'=>true),
+			array('start_from, start_to, date', 'required'),
+			array('start_from, start_to', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('profile_follows_id, follower, followed, date, read', 'safe', 'on'=>'search'),
+			array('communication_id, start_from, start_to, date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,8 +48,9 @@ class ProfileFollows extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'follower0' => array(self::BELONGS_TO, 'User', 'follower'),
-			'followed0' => array(self::BELONGS_TO, 'User', 'followed'),
+			'startTo' => array(self::BELONGS_TO, 'User', 'start_to'),
+			'startFrom' => array(self::BELONGS_TO, 'User', 'start_from'),
+			'messages' => array(self::HAS_MANY, 'Messages', 'messages_communication_id'),
 		);
 	}
 
@@ -59,11 +60,10 @@ class ProfileFollows extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'profile_follows_id' => 'Profile Follows',
-			'follower' => 'Follower',
-			'followed' => 'Followed',
+			'communication_id' => 'Communication',
+			'start_from' => 'Start From',
+			'start_to' => 'Start To',
 			'date' => 'Date',
-			'read' => 'Read',
 		);
 	}
 
@@ -85,11 +85,10 @@ class ProfileFollows extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('profile_follows_id',$this->profile_follows_id);
-		$criteria->compare('follower',$this->follower);
-		$criteria->compare('followed',$this->followed);
+		$criteria->compare('communication_id',$this->communication_id);
+		$criteria->compare('start_from',$this->start_from);
+		$criteria->compare('start_to',$this->start_to);
 		$criteria->compare('date',$this->date,true);
-		$criteria->compare('read',$this->read);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -100,7 +99,7 @@ class ProfileFollows extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ProfileFollows the static model class
+	 * @return Conversation the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

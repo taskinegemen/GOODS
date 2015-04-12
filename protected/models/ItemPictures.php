@@ -30,8 +30,8 @@ class ItemPictures extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('item_pictures_id, item_id, picture, is_it_main', 'required'),
-			array('item_pictures_id, item_id, is_it_main', 'numerical', 'integerOnly'=>true),
+			array('item_id, picture, is_it_main', 'required'),
+			array('item_id, is_it_main', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('item_pictures_id, item_id, picture, is_it_main', 'safe', 'on'=>'search'),

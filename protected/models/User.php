@@ -11,6 +11,9 @@
  * @property string $picture
  *
  * The followings are the available model relations:
+ * @property Conversation[] $conversations
+ * @property Conversation[] $conversations1
+ * @property Item[] $items
  * @property ItemsLiked[] $itemsLikeds
  * @property Messages[] $messages
  * @property Messages[] $messages1
@@ -51,9 +54,12 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'conversations' => array(self::HAS_MANY, 'Conversation', 'start_to'),
+			'conversations1' => array(self::HAS_MANY, 'Conversation', 'start_from'),
+			'items' => array(self::HAS_MANY, 'Item', 'user_id'),
 			'itemsLikeds' => array(self::HAS_MANY, 'ItemsLiked', 'user_id'),
-			'messages' => array(self::HAS_MANY, 'Messages', 'from'),
-			'messages1' => array(self::HAS_MANY, 'Messages', 'to'),
+			'messages' => array(self::HAS_MANY, 'Messages', 'to'),
+			'messages1' => array(self::HAS_MANY, 'Messages', 'from'),
 			'profileFollows' => array(self::HAS_MANY, 'ProfileFollows', 'liker'),
 			'profileFollows1' => array(self::HAS_MANY, 'ProfileFollows', 'liked'),
 		);
